@@ -1,11 +1,14 @@
-const db = wx.cloud.database()
+const db = wx.cloud.database();
+const _ = db.command;
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    dataObj: ""
+    dataObj: "",
+    myvalue: "",
+    dataArr: []
   },
   getData() {
     // 获取单一数据
@@ -44,7 +47,7 @@ Page({
   addData() {
     wx.showLoading({
       title: '数据加载中...',
-      mask:true
+      mask: true
     })
     db.collection("userlist").add({
       data: {
@@ -57,11 +60,116 @@ Page({
       wx.hideLoading()
     })
   },
+  // 提交表单
+  btnSub(res) {
+    // 解构赋值
+    // let {
+    //   name,
+    //   age,
+    //   phone
+    // } = res.detail.value;
+    // db.collection("userlist").add({
+    //   data: {
+    //     name: name,
+    //     age: age,
+    //     phone: phone
+    //   }
+    // }).then(res => {
+    //   console.log(res);
+    // })
+    // 直接赋值
+    let resValue = res.detail.value;
+    db.collection("userlist").add({
+      data: resValue
+    }).then(res => {
+      console.log(res);
+    })
+  },
+  // 修改
+  changeData() {
+    db.collection("userlist").where({
+      name: "李四"
+    }).update({
+      data: {
+        name: "熊大",
+        like: "熊二"
+      }
+    }).then(res => {
+      console.log(res);
+    })
+  },
+  // 删除
+  delData() {
+    db.collection("userlist").doc(this.data.myvalue).remove().then(res => {
+      console.log(res);
+    })
+  },
+  myid(res) {
+    this.setData({
+      myvalue: res.detail.value
+    })
+    console.log(this.data.myvalue);
+  },
+  showData() {
+    db.collection('userlist').get().then(res => {
+      this.setData({
+        dataArr: res.data
+      })
+    })
+  },
+  // 数据筛选
+  shaiData() {
+    // db.collection('userlist').where({
+    //     age: _.or(_.eq(9999),_.eq(45))
+    //   }).get()
+    //   .then(res => {
+    //     console.log(res);
+    //     this.setData({
+    //       dataList: res.data
+    //     })
+    //   })
+    // 多个或条件
+    // db.collection('userlist').where(_.or([{
+    //       age: _.eq(9999)
+    //     },
+    //     {
+    //       name: _.eq('步美')
+    //     }
+    //   ])).get()
+    //   .then(res => {
+    //     console.log(res);
+    //     this.setData({
+    //       dataList: res.data
+    //     })
+    //   })
+    // 查询特殊字段
+    db.collection('userlist').where({
+        like:_.exists(true)
+      }).get()
+      .then(res => {
+        console.log(res);
+        this.setData({
+          dataList: res.data
+        })
+      })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.showData();
+    db.collection('userlist').watch({
+      onChange: res => {
+        this.setData({
+          dataArr: res.docs
+        });
+        console.log(res);
+      },
+      onError: err => {
+        console.log(err);
+      }
+    })
   },
 
   /**

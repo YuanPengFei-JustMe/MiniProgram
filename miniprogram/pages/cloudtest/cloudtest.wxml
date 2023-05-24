@@ -1,0 +1,11 @@
+<view bindtap="clickRow" data-id="{{item._id}}" data-idx="{{index}}" class="row" wx:for="{{dataList}}" wx:key="index">
+  <view class="title">
+    {{index+1}}、{{item.name}}
+  </view>
+  <view>
+    年龄:{{item.age}}
+  </view>
+  <view>
+    手机号:{{item.phone}}
+  </view>
+</view>

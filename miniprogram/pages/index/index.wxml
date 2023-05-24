@@ -1,8 +1,29 @@
 <button type="primary" bindtap="getData">获取数据</button>
+------------------
 <!-- 获取单一数据 -->
 <!-- <view>{{dataObj.name}}--{{dataObj.age}}--{{dataObj.phone}}</view> -->
 <!-- 获取数据列表 -->
-<view wx:for="{{dataObj}}">
+<view wx:for="{{dataObj}}" wx:key="index">
   {{item.name}}=={{item.age}}=={{item.phone}}
 </view>
 <button type="primary" bindtap="addData">插入数据</button>
+----------------
+<form action="" bindsubmit="btnSub">
+  <input type="text" name='name' placeholder="请输入姓名" />
+  <input type="text" name='number' placeholder="请输入年龄" />
+  <input type="text" name='phone' placeholder="请输入电话" />
+  <button type="primary" form-type="submit">提交</button>
+  <button form-type="reset">重置</button>
+</form>
+-----------------
+<button type="primary" bindtap="changeData">修改数据</button>
+----------------
+<input type="text" placeholder="请输入id" bindinput="myid" />
+<button type="primary" bindtap="delData">删除数据</button>
+--------------
+<view wx:for="{{dataArr}}" wx:key="index">{{index+1}}.{{item.name}}</view>
+-------------
+<button type="primary" bindtap="shaiData">数据筛选</button>
+<view wx:for="{{dataList}}" wx:key="index">
+  {{index+1}}.{{item.name}}
+</view>

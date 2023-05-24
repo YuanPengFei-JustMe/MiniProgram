@@ -1,5 +1,7 @@
 {
   "pages": [
+    "pages/demo/demo",
+    "pages/cloudtest/cloudtest",
     "pages/index/index"
   ],
   "window": {
